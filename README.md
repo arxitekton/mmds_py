@@ -68,7 +68,19 @@ page_id | title | variance
 #### Clustering: 
 For clustering I used kmeans (see [variance_ts_final.ipynb](https://github.com/arxitekton/mmds_py/blob/master/variance_ts_final.ipynb)).
 To identify the optimal number of clusters I used “Elbow Curve” approach (see [variance_ts_final.ipynb](https://github.com/arxitekton/mmds_py/blob/master/variance_ts_final.ipynb)):
+![Elbow Curve](https://github.com/arxitekton/mmds_py/blob/master/img/elbow_curve.png)
+I get 4 cluster with next variance statistics:
+![cluster_variance_describe](https://github.com/arxitekton/mmds_py/blob/master/img/cluster_variance_describe.png)
+![boxplot clustering](https://github.com/arxitekton/mmds_py/blob/master/img/clustering.png)
 
+
+#### Evaluation
+I used Silhouette analysisto evaluate the resulting clustering (see [variance_ts_final.ipynb](https://github.com/arxitekton/mmds_py/blob/master/variance_ts_final.ipynb)):
+Silhouette Coefficient: 0.897
+
+#### Example of pageviews:
+![top1_by_variance](https://github.com/arxitekton/mmds_py/blob/master/img/top1_by_variance.png)
+![top2_by_variance](https://github.com/arxitekton/mmds_py/blob/master/img/top2_by_varianc.png)
 
 algorithm:
 * getting 'langlinks' data and filter $"lang" ==="en"
@@ -79,3 +91,11 @@ algorithm:
     * leftanti with 'langlinks' (exclude corresponding row) - because we need just article missing in the enwiki
     * groupBy "page_id" and aggregate sum of "requests"
     * append to parquet
+* read parquet
+* group by date
+* group requests by page_id and compute variance, count and avg pageviews
+* filter pages which have daily views and average pageview > 100
+* read ukwiki-20180701-page for title field
+* join two dataframes (for adding title field)
+* Clustering with kmeans;identify the optimal number of clusters with 'Elbow curve' approach
+* Silhouette analysis to evaluate the resulting clustering
